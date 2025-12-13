@@ -1,0 +1,26 @@
+# Ignore bundler config.
+/.bundle
+
+# Ignore all logfiles and tempfiles.
+/log/*
+/tmp/*
+!/log/.keep
+!/tmp/.keep
+
+# Ignore pidfiles, but keep the directory.
+/tmp/pids/*
+!/tmp/pids/
+
+# Ignore storage (uploaded files in development).
+/storage/*
+!/storage/.keep
+
+# Ignore master key for decrypting credentials.
+/config/master.key
+
+# Ignore database
+/db/*.sqlite3
+/db/*.sqlite3-journal
+
+# Ignore Byebug history
+.byebug_history
