@@ -6,8 +6,7 @@
 Next.jsを用いたモダンなWebアプリケーションとして構築され、Dockerによる手軽なローカル開発環境を提供します。
 
 <p align="center">
-  <!-- 将来的にスクリーンショットをここに配置 -->
-  <img src="https://via.placeholder.com/800x400.png?text=Neumorphism+UI+Coming+Soon" alt="UI Preview" width="100%">
+  <img src="public/assets/preview.png" alt="UI Preview" width="100%">
 </p>
 
 ## ✨ Features
