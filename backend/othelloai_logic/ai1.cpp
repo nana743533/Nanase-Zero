@@ -8,11 +8,14 @@
 
 #define inf 1000000000
 #define bonus 100
-// tableの定義
+
+// Transposition tables for move ordering and caching
+// Used to store previously evaluated positions for faster search
 unordered_map<board, int, board::hash> transpose_table;
 unordered_map<board, int, board::hash> former_transpose_table;
 
-// moveordering用の評価値を算出
+// Calculate evaluation for move ordering
+// Uses previous search results to prioritize better moves first
 int moveordering_evaluate(const board &b) {
   auto it = former_transpose_table.find(b);
   if (it != former_transpose_table.end()) {
@@ -21,7 +24,8 @@ int moveordering_evaluate(const board &b) {
   return -evaluate(b);
 }
 
-// negaalpha法
+// Nega-alpha search algorithm (variant of minimax with alpha-beta pruning)
+// Returns the evaluation score for the current position
 int nega_alpha(board b, int depth, bool passed, int alpha, int beta) {
   auto it = transpose_table.find(b);
   if (it != transpose_table.end())
@@ -61,7 +65,10 @@ int nega_alpha(board b, int depth, bool passed, int alpha, int beta) {
   return max_score;
 }
 
-// depth手読みの探索
+// Iterative deepening search
+// Searches from (depth-offset) to depth, using results from shallower searches
+// to improve move ordering in deeper searches
+// Returns the best move as an index (0-63), or -1 if no legal move
 int search(board b, int depth, int offset) {
   int start = std::max(1, depth - offset);
   int res = -1;
