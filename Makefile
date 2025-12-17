@@ -2,8 +2,7 @@
         install setup compile-cpp \
         test test-backend test-backend-all test-backend-rspec \
         lint lint-backend lint-frontend lint-backend-fix \
-        security security-backend audit-backend brakeman-backend \
-        dev-backend dev-frontend rebuild
+        rebuild
 
 .DEFAULT_GOAL := help
 
@@ -37,7 +36,7 @@ help: ## Display this help message
 	@echo ""
 	@echo "Testing:"
 	@echo "  make test                - Run all tests"
-	@echo "  make test-backend        - Run backend tests (minitest)"
+	@echo "  make test-backend FILES='file1 file2' - Run specific backend test files"
 	@echo "  make test-backend-all    - Run all backend tests (minitest + rspec)"
 	@echo "  make test-backend-rspec  - Run backend RSpec tests"
 	@echo "  make test-frontend       - Run frontend linting"
@@ -47,16 +46,6 @@ help: ## Display this help message
 	@echo "  make lint-backend        - Lint backend code with RuboCop"
 	@echo "  make lint-backend-fix    - Auto-fix backend code with RuboCop"
 	@echo "  make lint-frontend       - Lint frontend code with ESLint"
-	@echo ""
-	@echo "Security:"
-	@echo "  make security            - Run all security checks"
-	@echo "  make security-backend    - Run backend security checks"
-	@echo "  make audit-backend       - Check for vulnerable dependencies"
-	@echo "  make brakeman-backend    - Run Brakeman security scanner"
-	@echo ""
-	@echo "Development:"
-	@echo "  make dev-backend         - Start backend development server"
-	@echo "  make dev-frontend        - Start frontend development server"
 
 # ============================================================================
 # Docker Commands
@@ -120,7 +109,7 @@ compile-cpp:
 test: test-backend test-frontend
 
 test-backend:
-	docker compose exec backend bin/rails test
+	docker compose exec backend bin/rails test $(FILES)
 
 test-backend-all:
 	docker compose exec backend bin/rails test
@@ -146,27 +135,3 @@ lint-backend-fix:
 
 lint-frontend:
 	docker compose exec frontend npm run lint
-
-# ============================================================================
-# Security Commands
-# ============================================================================
-
-security: security-backend
-
-security-backend: audit-backend brakeman-backend
-
-audit-backend:
-	docker compose exec backend bin/bundler-audit check --update
-
-brakeman-backend:
-	docker compose exec backend bin/brakeman -q
-
-# ============================================================================
-# Development Commands
-# ============================================================================
-
-dev-backend:
-	docker compose exec backend bin/rails s -p 3001
-
-dev-frontend:
-	docker compose exec frontend npm run dev
