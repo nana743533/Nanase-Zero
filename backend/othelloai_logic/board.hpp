@@ -4,15 +4,15 @@
 
 using namespace std;
 
-// Board dimensions
-#define hw 8        // Board width/height (8x8)
-#define hw2 64      // Total cells (8*8)
+// 盤面サイズ
+#define hw 8        // 縦横のマス数
+#define hw2 64      // 全マス数
 
-// Board representation constants
-#define n_board_idx 38  // Number of line indices (8 rows + 8 cols + 11 diag1 + 11 diag2)
-#define n_line 6561     // Number of line patterns (3^8)
+// 盤面表現
+#define n_board_idx 38  // ライン数
+#define n_line 6561     // ラインパターン数 (3^8)
 
-// Cell states
+// セル状態
 #define vacant 0
 #define black 1
 #define white 2
@@ -205,7 +205,7 @@ public:
   bool operator==(const board &another) const {
     if (this->player != another.player)
       return false;
-    // Compare all elements of the board_idx array
+    // 全要素を比較
     for (int i = 0; i < n_board_idx; ++i) {
       if (this->board_idx[i] != another.board_idx[i])
         return false;
