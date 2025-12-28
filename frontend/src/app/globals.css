@@ -5,16 +5,22 @@
   --color-neumorphism-text: #4A5568;
   --color-neumorphism-accent: #4FD1C5;
 
-  /* Green Theme for Board */
-  --color-neumorphism-green-base: #C1E1C1;
-  /* Tea Green / Pastel Green */
-  --color-neumorphism-green-surface: #C1E1C1;
+  /* Green Theme: Cells (Vibrant) */
+  --color-neumorphism-green-base: #68D391;
+
+  /* Green Theme: Board Frame (Darker) */
+  --color-neumorphism-green-board: #276749;
+  /* Deep Green */
 
   --shadow-neumorphism-flat: 9px 9px 16px rgb(163 177 198 / 0.6), -9px -9px 16px rgb(255 255 255 / 0.5);
   --shadow-neumorphism-pressed: inset 6px 6px 10px 0 rgb(163 177 198 / 0.7), inset -6px -6px 10px 0 rgb(255 255 255 / 0.8);
 
-  --shadow-neumorphism-green-flat: 9px 9px 16px rgb(158 184 158 / 0.6), -9px -9px 16px rgb(228 255 228 / 0.5);
-  --shadow-neumorphism-green-pressed: inset 6px 6px 10px 0 rgb(158 184 158 / 0.7), inset -6px -6px 10px 0 rgb(228 255 228 / 0.8);
+  /* Shadows for Cells */
+  --shadow-neumorphism-green-flat: 5px 5px 10px rgb(87 176 121 / 0.5), -5px -5px 10px rgb(121 246 169 / 0.4);
+  --shadow-neumorphism-green-pressed: inset 4px 4px 8px 0 rgb(87 176 121 / 0.6), inset -4px -4px 8px 0 rgb(121 246 169 / 0.5);
+
+  /* Shadows for Board Frame */
+  --shadow-neumorphism-board-flat: 12px 12px 24px rgb(28 77 55 / 0.6), -12px -12px 24px rgb(50 129 93 / 0.5);
 }
 
 :root {
