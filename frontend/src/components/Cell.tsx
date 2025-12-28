@@ -9,31 +9,45 @@ interface CellProps {
 }
 
 export const Cell: React.FC<CellProps> = ({ value, onClick, disabled }) => {
+  // Always render the empty cell background
+  const bgImage = '/assets/game/cell_empty.png';
+
+  // Determine stone image (with transparency)
+  let stoneImage = null;
+  if (value === 0) stoneImage = '/assets/game/stone_black.png';
+  if (value === 1) stoneImage = '/assets/game/stone_white.png';
+
   return (
     <div
       onClick={!disabled ? onClick : undefined}
       className={`
-        w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 lg:w-20 lg:h-20
-        rounded-lg
+        w-8 h-8 sm:w-12 sm:h-12 md:w-16 md:h-16 lg:w-20 lg:h-20
         flex items-center justify-center
-        transition-all duration-200 ease-in-out
         cursor-pointer
-        ${value === -1
-          ? 'bg-neumorphism-base shadow-neumorphism-flat hover:shadow-neumorphism-pressed active:shadow-neumorphism-pressed'
-          : 'bg-neumorphism-base shadow-neumorphism-pressed'
-        }
+        relative
+        bg-[#2F5D40]
+        border border-white/10
       `}
     >
-      {/* Stone */}
-      {value !== -1 && (
-        <div
-          className={`
-            w-[70%] h-[70%] rounded-full shadow-md transition-all duration-300
-            ${value === 0
-              ? 'bg-gray-800 border-2 border-gray-700'
-              : 'bg-gray-100 border-2 border-white'
-            }
-          `}
+      {/* Background Layer: Always the seamless empty cell */}
+      <img
+        src={bgImage}
+        alt="Cell"
+        className="absolute inset-0 w-full h-full object-cover block"
+        draggable={false}
+        onError={(e) => {
+          console.error("Image failed to load:", bgImage);
+          e.currentTarget.style.display = 'none';
+        }}
+      />
+
+      {/* Stone Layer: Overlay on top */}
+      {stoneImage && (
+        <img
+          src={stoneImage}
+          alt={value === 0 ? "Black" : "White"}
+          className="absolute inset-0 w-full h-full object-contain block z-10"
+          draggable={false}
         />
       )}
     </div>

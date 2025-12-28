@@ -7,11 +7,23 @@
 
   --shadow-neumorphism-flat: 9px 9px 16px rgb(163 177 198 / 0.6), -9px -9px 16px rgb(255 255 255 / 0.5);
   --shadow-neumorphism-pressed: inset 6px 6px 10px 0 rgb(163 177 198 / 0.7), inset -6px -6px 10px 0 rgb(255 255 255 / 0.8);
+
+  /* Removed board specific variables from @theme to avoid potential conflicts or scope issues */
 }
 
 :root {
   --background: var(--color-neumorphism-base);
   --foreground: var(--color-neumorphism-text);
+
+  /* Board Theme (Deep Green Neumorphism) - Moved to :root for safety */
+  --color-board-base: #2F5D40;
+  /* Forest Green */
+
+  /* High Contrast Shadows for Depth (Inset for Cells) */
+  --shadow-cell-inset: inset 5px 5px 10px rgb(15 35 25 / 0.8), inset -5px -5px 10px rgb(60 110 80 / 0.4);
+
+  /* Stone Drop Shadow */
+  --shadow-stone-drop: 4px 4px 8px rgba(0, 0, 0, 0.6);
 }
 
 body {

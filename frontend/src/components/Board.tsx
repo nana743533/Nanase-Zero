@@ -11,8 +11,8 @@ interface BoardProps {
 
 export const Board: React.FC<BoardProps> = ({ board, onCellClick, disabled }) => {
   return (
-    <div className="p-4 sm:p-6 rounded-2xl bg-neumorphism-base shadow-neumorphism-flat">
-      <div className="grid grid-cols-8 gap-2 or sm:gap-3 md:gap-4">
+    <div className="p-0 rounded-2xl overflow-hidden shadow-2xl">
+      <div className="grid grid-cols-8 gap-0 bg-[var(--color-board-base)]">
         {board.map((cellValue, index) => (
           <Cell
             key={index}
