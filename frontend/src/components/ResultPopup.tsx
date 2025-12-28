@@ -9,7 +9,7 @@ interface ResultPopupProps {
   onRestart: () => void;
 }
 
-export const ResultPopup: React.FC<ResultPopupProps> = ({ winner, board, onRestart }) => {
+export const ResultPopup: React.FC<ResultPopupProps & { playerColor?: Turn }> = ({ winner, board, onRestart, playerColor = 0 }) => {
   if (winner === null) return null;
 
   const rawBlackCount = board.filter((c) => c === 0).length;
@@ -26,13 +26,13 @@ export const ResultPopup: React.FC<ResultPopupProps> = ({ winner, board, onResta
     const split = Math.floor(emptyCount / 2); // Should be even if board is even, but safety floor
     finalBlackCount += split;
     finalWhiteCount += split;
-    // If emptyCount is odd (shouldn't be on 8x8 normally if full game, but theoretically possible if early end?), 
-    // actually Othello board 64 is even. 
   } else if (winner === 0) {
-    resultMessage = 'You Win!';
+    // Black Wins
+    resultMessage = playerColor === 0 ? 'You Win!' : 'AI Wins!';
     finalBlackCount += emptyCount;
   } else {
-    resultMessage = 'AI Win!';
+    // White Wins
+    resultMessage = playerColor === 1 ? 'You Win!' : 'AI Wins!';
     finalWhiteCount += emptyCount;
   }
 
