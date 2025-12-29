@@ -27,7 +27,7 @@ jest.mock('../../components/ResultPopup', () => ({
   ResultPopup: ({ onClose }: { onClose: () => void }) => (
     <div data-testid="result-popup">
       Result Popup
-      <button onClick={onClose}>Close</button>
+      <button onClick={onClose}>閉じる</button>
     </div>
   )
 }));
@@ -74,7 +74,7 @@ describe('Home Page', () => {
     });
 
     render(<Home />);
-    expect(screen.getByText('Loading...')).toBeInTheDocument();
+    expect(screen.getByText('読み込み中...')).toBeInTheDocument();
   });
 
   it('renders game content when loaded and param is valid', () => {
@@ -82,7 +82,7 @@ describe('Home Page', () => {
 
     render(<Home />);
 
-    expect(screen.getByText('Your Turn')).toBeInTheDocument();
+    expect(screen.getByText('あなたのターン')).toBeInTheDocument();
     expect(screen.getByTestId('board')).toBeInTheDocument();
   });
 
@@ -93,7 +93,7 @@ describe('Home Page', () => {
     expect(mockRouter.replace).toHaveBeenCalledWith('/newgame');
   });
 
-  it('calls resetGame when Reset button is clicked', () => {
+  it('calls resetGame when リセット button is clicked', () => {
     mockSearchParams.get.mockReturnValue('white');
     const resetGameMock = jest.fn();
     (useOthello as jest.Mock).mockReturnValue({
@@ -108,7 +108,7 @@ describe('Home Page', () => {
 
     render(<Home />);
 
-    const resetButton = screen.getByText('Reset');
+    const resetButton = screen.getByText('リセット');
     fireEvent.click(resetButton);
 
     expect(resetGameMock).toHaveBeenCalled();
@@ -129,7 +129,7 @@ describe('Home Page', () => {
     expect(screen.getByTestId('result-popup')).toBeInTheDocument();
   });
 
-  it('closes result popup when close button is clicked', async () => {
+  it('closes result popup when 閉じる button is clicked', async () => {
     mockSearchParams.get.mockReturnValue('black');
     (useOthello as jest.Mock).mockReturnValue({
       board: Array(64).fill(0),
@@ -141,7 +141,7 @@ describe('Home Page', () => {
     });
 
     render(<Home />);
-    const closeBtn = screen.getByText('Close');
+    const closeBtn = screen.getByText('閉じる');
     fireEvent.click(closeBtn);
 
     // Wait for state update (it's local state in page)
