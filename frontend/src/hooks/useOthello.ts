@@ -5,6 +5,7 @@ import { getFlippedIndices, boardToString, hasValidMoves } from '../utils/othell
 type CellValue = -1 | 0 | 1;
 // 0: Black (First), 1: White
 type Turn = 0 | 1;
+export type GameMode = 'ai' | 'human';
 
 export const useOthello = () => {
   // Initial Board Setup: center 4 stones
@@ -18,9 +19,10 @@ export const useOthello = () => {
   const [turn, setTurn] = useState<Turn>(0); // Black starts
   const [isProcessing, setIsProcessing] = useState(false);
   const [winner, setWinner] = useState<Turn | 'Draw' | null>(null);
+  const [gameMode, setGameMode] = useState<GameMode>('ai');
 
-  // Pass Popup State: 'AI' means AI passed, 'USER' means User passed
-  const [passPopup, setPassPopup] = useState<'AI' | 'USER' | null>(null);
+  // Pass Popup State: 'PLAYER0' means Black passed, 'PLAYER1' means White passed
+  const [passPopup, setPassPopup] = useState<'PLAYER0' | 'PLAYER1' | null>(null);
 
   const checkGameEnd = useCallback((currentBoard: CellValue[]) => {
     const blackCanMove = hasValidMoves(currentBoard, 0);
@@ -39,8 +41,8 @@ export const useOthello = () => {
 
   const executeMove = useCallback((index: number) => {
     // 1. Validation & Flipping (Client Side)
-    // Only allow move if it's Player's turn (0) and not processing
-    if (turn !== 0 || isProcessing || winner !== null) return;
+    // Don't allow move if processing or game is over
+    if (isProcessing || winner !== null) return;
 
     const flippedIndices = getFlippedIndices(board, index, turn);
     if (flippedIndices.length === 0) return;
@@ -53,12 +55,13 @@ export const useOthello = () => {
     });
     setBoard(newBoard);
 
-    const nextTurn = 1; // Always AI next after user move
+    // 3. Switch turn: In human mode, switch between 0 and 1; In AI mode, always go to AI (1)
+    const nextTurn: Turn = gameMode === 'human' ? (1 - turn) as Turn : 1;
     setTurn(nextTurn);
 
     // Check game end immediately after move
     checkGameEnd(newBoard);
-  }, [board, turn, isProcessing, winner, checkGameEnd]);
+  }, [board, turn, isProcessing, winner, checkGameEnd, gameMode]);
 
 
   // AI Turn Logic
@@ -70,7 +73,7 @@ export const useOthello = () => {
 
       if (aiMoveIndex === -1) {
         // AI Pass
-        setPassPopup('AI');
+        setPassPopup('PLAYER1');
         setTurn(0); // Return turn to player
       } else {
         // AI Move
@@ -98,46 +101,44 @@ export const useOthello = () => {
     }
   }, [board, checkGameEnd]);
 
-  // Check for pass conditions (User only, AI pass is handled in runAiTurn)
+  // Check for pass conditions
   const checkPassCondition = useCallback(() => {
-    // User Turn (0)
-    const userCanMove = hasValidMoves(board, 0);
+    const currentPlayerCanMove = hasValidMoves(board, turn);
 
-    // If user has no moves, show pass popup
-    if (!userCanMove) {
+    // If current player has no moves, show pass popup
+    if (!currentPlayerCanMove) {
       // Double check game isn't over
       if (!checkGameEnd(board)) {
-        setPassPopup('USER');
+        setPassPopup(turn === 0 ? 'PLAYER0' : 'PLAYER1');
       }
     }
-  }, [board, checkGameEnd]);
+  }, [board, turn, checkGameEnd]);
 
-  // Effect to trigger AI Turn or Check User Pass
+  // Effect to trigger AI Turn or Check Pass
   useEffect(() => {
     if (winner !== null || passPopup) return;
 
-
-    if (turn === 1) {
-      // AI Turn
+    if (gameMode === 'ai' && turn === 1) {
+      // AI Turn in AI mode
       const timer = setTimeout(() => {
         runAiTurn();
       }, 500);
       return () => clearTimeout(timer);
     } else {
-      // User Turn (0)
+      // Human turn (or both in human mode)
       checkPassCondition();
     }
-  }, [turn, winner, runAiTurn, checkPassCondition, passPopup]);
+  }, [turn, winner, runAiTurn, checkPassCondition, passPopup, gameMode]);
 
 
   // Function to acknowledge pass popup
   const acknowledgePass = useCallback(() => {
-    if (passPopup === 'AI') {
-      // AI passed, control returned to User (turn is already 0 set in runAiTurn)
-      // Nothing to do but close popup
+    if (passPopup === 'PLAYER1') {
+      // White/AI passed, control returned to Black
       setPassPopup(null);
-    } else if (passPopup === 'USER') {
-      // User passed. Control goes to AI.
+      setTurn(0);
+    } else if (passPopup === 'PLAYER0') {
+      // Black passed, control goes to White
       setPassPopup(null);
       setTurn(1);
     }
@@ -149,9 +150,11 @@ export const useOthello = () => {
     turn,
     isProcessing,
     winner,
-    passPopup, // Export this
-    acknowledgePass, // Export this
+    passPopup,
+    gameMode,
+    acknowledgePass,
     executeMove,
+    setGameMode,
     resetGame: () => {
       setBoard(initialBoard);
       setTurn(0);

@@ -4,25 +4,37 @@ import { PassPopup } from '../PassPopup';
 
 describe('PassPopup Component', () => {
   it('renders nothing when passType is null', () => {
-    const { container } = render(<PassPopup passType={null} onAcknowledge={() => { }} />);
+    const { container } = render(<PassPopup passType={null} onAcknowledge={() => { }} gameMode="ai" />);
     expect(container).toBeEmptyDOMElement();
   });
 
-  it('renders AI pass message when passType is AI', () => {
-    render(<PassPopup passType="AI" onAcknowledge={() => { }} />);
+  it('renders AI pass message in AI mode when passType is PLAYER1', () => {
+    render(<PassPopup passType="PLAYER1" onAcknowledge={() => { }} gameMode="ai" />);
     expect(screen.getByText('PASS')).toBeInTheDocument();
     expect(screen.getByText('AI cannot move. Turn passes to you.')).toBeInTheDocument();
   });
 
-  it('renders User pass message when passType is USER', () => {
-    render(<PassPopup passType="USER" onAcknowledge={() => { }} />);
+  it('renders User pass message in AI mode when passType is PLAYER0', () => {
+    render(<PassPopup passType="PLAYER0" onAcknowledge={() => { }} gameMode="ai" />);
     expect(screen.getByText('PASS')).toBeInTheDocument();
     expect(screen.getByText('You cannot move. Turn passes to AI.')).toBeInTheDocument();
   });
 
+  it('renders Black pass message in human mode when passType is PLAYER0', () => {
+    render(<PassPopup passType="PLAYER0" onAcknowledge={() => { }} gameMode="human" />);
+    expect(screen.getByText('PASS')).toBeInTheDocument();
+    expect(screen.getByText('Black cannot move. Turn passes to White.')).toBeInTheDocument();
+  });
+
+  it('renders White pass message in human mode when passType is PLAYER1', () => {
+    render(<PassPopup passType="PLAYER1" onAcknowledge={() => { }} gameMode="human" />);
+    expect(screen.getByText('PASS')).toBeInTheDocument();
+    expect(screen.getByText('White cannot move. Turn passes to Black.')).toBeInTheDocument();
+  });
+
   it('calls onAcknowledge when OK button is clicked', () => {
     const mockAcknowledge = jest.fn();
-    render(<PassPopup passType="AI" onAcknowledge={mockAcknowledge} />);
+    render(<PassPopup passType="PLAYER1" onAcknowledge={mockAcknowledge} gameMode="ai" />);
 
     const button = screen.getByRole('button', { name: 'OK' });
     fireEvent.click(button);
@@ -32,7 +44,7 @@ describe('PassPopup Component', () => {
 
   it('calls onAcknowledge when overlay is clicked', () => {
     const mockAcknowledge = jest.fn();
-    render(<PassPopup passType="AI" onAcknowledge={mockAcknowledge} />);
+    render(<PassPopup passType="PLAYER1" onAcknowledge={mockAcknowledge} gameMode="ai" />);
 
     // The overlay is the outer div. We can find it by looking for the one with the click handler needed.
     // Or just check that clicking outside the modal content triggers it.
@@ -54,7 +66,7 @@ describe('PassPopup Component', () => {
 
   it('does NOT call onAcknowledge when modal content is clicked', () => {
     const mockAcknowledge = jest.fn();
-    render(<PassPopup passType="AI" onAcknowledge={mockAcknowledge} />);
+    render(<PassPopup passType="PLAYER1" onAcknowledge={mockAcknowledge} gameMode="ai" />);
 
     const modalContent = screen.getByText('PASS').parentElement;
 
