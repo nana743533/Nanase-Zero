@@ -72,7 +72,8 @@ describe('useOthello Hook', () => {
   });
 
   it('executes user move and triggers AI turn', async () => {
-    (othelloLogic.getFlippedIndices as jest.Mock).mockReturnValue([20]); // Mock flipped stones
+    // Return flips for ANY move (index 20 for user, something else for AI if needed, but simple return works)
+    (othelloLogic.getFlippedIndices as jest.Mock).mockReturnValue([20]);
 
     const { result } = renderHook(() => useOthello());
 
@@ -129,6 +130,9 @@ describe('useOthello Hook', () => {
       if (turn === 0) return false; // User cannot move
       return true; // AI can move (so game not over)
     });
+    // Ensure AI move is valid to avoid console error
+    (othelloLogic.getFlippedIndices as jest.Mock).mockReturnValue([20]);
+
 
     const { result } = renderHook(() => useOthello());
 
