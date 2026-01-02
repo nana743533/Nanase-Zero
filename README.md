@@ -10,7 +10,7 @@
 
 ## ✨ Features
 
-- **High Performance AI**: C++ (Nega-alpha法) による高速かつ強力な思考エンジン。
+- **High Performance AI**: C++ による高速かつ強力な思考エンジン。
 - **Neumorphism Design**: 光と影を計算した、「触りたくなる」モダンなUI。
 - **Robust Architecture**: Next.js, Rails API, C++ の3層構造による堅牢な設計。
 
