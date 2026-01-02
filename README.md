@@ -28,8 +28,6 @@
 
 👉 **[セットアップガイド (docs/GETTING_STARTED.md)](docs/GETTING_STARTED.md)**
 
-1. **Docker Quick Start**: `make up`
-2. **Manual Setup**: Backend & Frontend separate install
 
 ## 🤝 Contributing
 Contributions are welcome!
