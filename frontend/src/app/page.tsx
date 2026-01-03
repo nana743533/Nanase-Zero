@@ -21,6 +21,7 @@ function GameContent() {
   const searchParams = useSearchParams();
   const playerParam = searchParams.get('player');
   const modeParam = searchParams.get('mode') as 'ai' | 'human' | null;
+  const aiLevelParam = searchParams.get('aiLevel') || 'v1';
 
   // Validate player param and redirect if invalid
   useEffect(() => {
@@ -49,7 +50,7 @@ function GameContent() {
     executeMove,
     resetGame,
     isStateLoaded
-  } = useOthello(playerColor, gameMode); // Pass game mode
+  } = useOthello(playerColor, gameMode, aiLevelParam); // Pass game mode and AI level
 
   const blackCount = board.filter((c) => c === 0).length;
   const whiteCount = board.filter((c) => c === 1).length;
@@ -161,6 +162,16 @@ function GameContent() {
           >
             New Game
           </button>
+
+          {/* AI Level Display */}
+          {gameMode === 'ai' && (
+            <div className="w-full mt-2">
+              <label className="block text-sm font-bold text-neumorphism-text mb-2 text-center">AI Level</label>
+              <div className="w-full p-2 rounded-xl bg-neumorphism-base text-neumorphism-text shadow-neumorphism-inset font-bold text-center">
+                {{ 'v1': 'Easy', 'v2': 'Normal', 'v3': 'Master' }[aiLevelParam] || 'Easy'}
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
